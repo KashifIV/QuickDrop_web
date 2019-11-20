@@ -1,0 +1,23 @@
+.large-text{
+    font-size: 121px;
+    color: white;
+}
+.medium-text{
+    font-size: 80px;
+    color: white;
+}
+b{
+    font-size: 150px;
+}
+.home{
+    padding: 30px; 
+    background-image: linear-gradient(to bottom right, #48c6ef, #6f86d6);;
+}
+.right-panel{
+    margin: 0;
+    width: 80%;
+    position: relative;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
