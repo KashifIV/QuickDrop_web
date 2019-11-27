@@ -2,8 +2,9 @@ import React from 'react';
 import {Form, Button, Row} from 'react-bootstrap'; 
 import './Login.css'; 
 import {signIn, signUp } from '../../redux/actions';
+import { connect } from 'react-redux';
 
-export default class Login extends React.Component{
+class Login extends React.Component{
 
     constructor(props) {
         super(props);
@@ -18,7 +19,7 @@ export default class Login extends React.Component{
             this.setState({signUp: false}); 
         }
         else{
-            this.props.dispatch(signIn('kappa', '123'));
+            this.props.signIn('kappa', '123');
         }
     }
     handleOnSignUp(){
@@ -26,7 +27,7 @@ export default class Login extends React.Component{
             this.setState({signUp:true}); 
         }
         else{
-            this.props.dispatch(signUp('kappa', '123'));
+            this.props.signUp('kappa', '123');
         }
     }
     render(){
@@ -60,3 +61,11 @@ export default class Login extends React.Component{
         </Form>
     }
 }
+
+const mapDispatchToProps = dispatch =>{
+    return{
+        signIn: (email, password) => dispatch(signIn(email, password)), 
+        signUp: (email, password) => dispatch(signUp(email, password)) 
+    }
+}
+export default connect(null, mapDispatchToProps)(Login); 

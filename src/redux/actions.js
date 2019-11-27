@@ -1,20 +1,24 @@
 import io from 'socket.io-client';
 const socket = io('https://quickdropbeta.herokuapp.com/'); 
 export function signUp(email, password) {
-    socket.emit("request", {"requestType": "signUp", "account" : {"username": email, "password": password, "email": email}}); 
+    return dispatch => {    
+        socket.emit("request", {"requestType": "createAccount", "account" : {"username": email, "password": password, "email": email}}); 
+    }
 }
 export function signIn(email, password){
-    socket.emit("request", {"requestType": "signIn", "account" : {"username": email, "password": password}}); 
+    return dispatch => {
+        socket.emit("request", {"requestType": "signIn", "account" : {"username": email, "password": password}}); 
+    }
 }
 export function socketDispatcher(){
     console.log('socket dispatcher initialized');
     socket.on("response", (data) => {
         console.log(data); 
-        const json = JSON.parse(data);
+        const json = data
         if (json['originalRequest']['requestType'] === 'signIn'){
             handleSignIn(json); 
         }
-        else if (json['originalRequest']['requestType'] === 'signUp'){
+        else if (json['originalRequest']['requestType'] == 'createAccount'){
             handleSignUp(json); 
         }
     }); 
