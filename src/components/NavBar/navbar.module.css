@@ -5,11 +5,23 @@
 }
 
 .skipLink a:focus {
-  position: fixed;
+  position: absolute;
   z-index: 1000;
   top: 0;
   left: 0;
-  padding: 10px;
-
   background: #000000;
+}
+.blur{
+  position: absolute;
+  top:0;
+  width: 100%;
+  min-height: 50px;
+  margin-bottom: 20px;
+  background:rgba(255,255,255,0.3);
+  z-index:1010;
+  -webkit-filter: blur(30px);
+  -moz-filter: blur(30px);
+  -o-filter: blur(30px);
+  -ms-filter: blur(30px);
+  filter: blur(30px);
 }

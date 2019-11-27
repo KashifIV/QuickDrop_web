@@ -7,8 +7,17 @@ import Footer from "./components/Footer";
 import Home from "./components/Home";
 import Dropped from "./components/Dropped";
 import Drop from "./components/Drop";
-//TODO Web Template Studio: Add routes for your new pages here.
+import { socketDispatcher } from "./redux/actions";
+import {connect } from 'react-redux'; 
+
 class App extends Component {
+  constructor(props){
+    super(props); 
+  }
+  componentDidMount(){
+    const {onInitialize} = this.props;
+    onInitialize(); 
+  }
   render() {
     return (
       <React.Fragment>
@@ -26,5 +35,14 @@ class App extends Component {
     );
   }
 }
-
-export default App;
+const mapDispatchToProps = dispatch => {
+  return {
+    onInitialize: () => dispatch(socketDispatcher)
+  }
+}
+const mapStateToProps = state => {
+  const {token} = state; 
+  return {token}; 
+}
+const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App); 
+export default AppContainer;

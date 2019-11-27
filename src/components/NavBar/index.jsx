@@ -10,7 +10,7 @@ export default function NavBar() {
       <div className={styles.skipLink}>
         <a href="#mainContent">Skip to Main Content</a>
       </div>
-      <nav className="navbar navbar-expand-sm navbar-light border-bottom justify-content-between">
+      <nav className="navbar navbar-expand-lg navbar-dark">
         <Link className="navbar-brand" to="/">
           QuickDrop
         </Link>

@@ -6,6 +6,7 @@
 body {
   margin-bottom: 160px !important; /* Height of the footer */
   padding: 0;
+  background-image: linear-gradient(to bottom right, #48c6ef, #6f86d6);
 }
 
 footer {
