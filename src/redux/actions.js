@@ -12,30 +12,30 @@ export function signIn(email, password){
 }
 export function socketDispatcher(){
     console.log('socket dispatcher initialized');
-    socket.on("response", (data) => {
+    return dispatch => socket.on("response", (data) => {
         console.log(data); 
         const json = data
         if (json['originalRequest']['requestType'] === 'signIn'){
-            handleSignIn(json); 
+            handleSignIn(json, dispatch); 
         }
         else if (json['originalRequest']['requestType'] == 'createAccount'){
-            handleSignUp(json); 
+            return dispatch => handleSignUp(json, dispatch); 
         }
     }); 
 }
-function handleSignUp(json){
+function handleSignUp(json, dispatch){
     if (json['errorCode'] == 0){
-        return dispatch => {
-            dispatch(signIn(json['originalRequest']['account']['username'], json['originalRequest']['account']['password']));  
-        }
+
+        dispatch(signIn(json['originalRequest']['account']['username'], json['originalRequest']['account']['password']));  
+        
     }
     else console.log(json['errorCode']); 
 }
-function handleSignIn(json){
+function handleSignIn(json, dispatch){
     if (json['errorCode'] == 0){
-        return dispatch => {
-            dispatch(onSignedIn(json['responseData']['token']));  
-        }
+        console.log(json['responseData']['tokenKey']);
+        dispatch(onSignedIn(json['responseData']['tokenKey']));  
+        
     }
     else console.log(json['errorCode']); 
 }

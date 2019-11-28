@@ -9,10 +9,19 @@ class Login extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            signUp : true
+            signUp : true,
+            token: this.props.token
         };     
         this.handleOnSignIn = this.handleOnSignIn.bind(this); 
         this.handleOnSignUp = this.handleOnSignUp.bind(this); 
+    }
+    componentDidUpdate(prevProps){
+        if (this.props.token != prevProps.token){
+            this.setState({token: this.props.token}); 
+            if (this.props.token != ""){
+                window.location.href = '/Drop'; 
+            }
+        }
     }
     handleOnSignIn(){
         if (this.state.signUp){
@@ -34,7 +43,7 @@ class Login extends React.Component{
         return <Form className="Login" >
             <Form.Group>
                 <Form.Label className="text-light">
-                    Email Address
+                    {this.state.token}
                 </Form.Label>
                 <Form.Control type="email" placeholder="Enter email" />
             </Form.Group>
@@ -68,4 +77,8 @@ const mapDispatchToProps = dispatch =>{
         signUp: (email, password) => dispatch(signUp(email, password)) 
     }
 }
-export default connect(null, mapDispatchToProps)(Login); 
+const mapStateToProps = state => ({
+    token: state.auth
+})
+const LoginContainer = connect(mapStateToProps, mapDispatchToProps)(Login); 
+export default LoginContainer; 

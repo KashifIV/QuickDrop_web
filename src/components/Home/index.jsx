@@ -1,8 +1,9 @@
 ﻿import React from "react";
 import Login from "../Login/Login";
+import {connect} from 'react-redux';
 import { Row, Col } from "react-bootstrap";
 import './Home.css';
-export default function Blank() {
+function Blank() {
   return <main id="mainContent" >
     <div className="home">
       <Row>
@@ -23,3 +24,4 @@ export default function Blank() {
     </div>
   </main>;
 }
+export default connect(null)(Blank);

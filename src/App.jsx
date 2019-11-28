@@ -37,7 +37,7 @@ class App extends Component {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    onInitialize: () => dispatch(socketDispatcher)
+    onInitialize: () => dispatch(socketDispatcher())
   }
 }
 const mapStateToProps = state => {
