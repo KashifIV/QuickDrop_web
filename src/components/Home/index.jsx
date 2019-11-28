@@ -3,7 +3,7 @@ import Login from "../Login/Login";
 import {connect} from 'react-redux';
 import { Row, Col } from "react-bootstrap";
 import './Home.css';
-function Blank() {
+function Home() {
   return <main id="mainContent" >
     <div className="home">
       <Row>
@@ -24,4 +24,4 @@ function Blank() {
     </div>
   </main>;
 }
-export default connect(null)(Blank);
+export default connect(null)(Home);

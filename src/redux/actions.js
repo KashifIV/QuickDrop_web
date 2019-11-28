@@ -19,15 +19,15 @@ export function socketDispatcher(){
             handleSignIn(json, dispatch); 
         }
         else if (json['originalRequest']['requestType'] == 'createAccount'){
-            return dispatch => handleSignUp(json, dispatch); 
+            handleSignUp(json, dispatch); 
         }
     }); 
 }
 function handleSignUp(json, dispatch){
     if (json['errorCode'] == 0){
-
-        dispatch(signIn(json['originalRequest']['account']['username'], json['originalRequest']['account']['password']));  
-        
+        const email = json['originalRequest']['account']['username'];
+        const password =  json['originalRequest']['account']['password'];     
+        socket.emit("request", {"requestType": "signIn", "account" : {"username": email, "password": password}});    
     }
     else console.log(json['errorCode']); 
 }
