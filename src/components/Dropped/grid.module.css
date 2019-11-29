@@ -1,5 +1,18 @@
 ﻿.header {
-  background-color: #cecece;
+  background-color: #1E435C;
   padding-top: 7rem;
   padding-bottom: 7rem;
+}
+h1{
+  color: white;
+}
+h3{
+  color: white; 
+}
+p{
+  color:white;
+}
+.icons{
+  color: white; 
+  size: 32px; 
 }

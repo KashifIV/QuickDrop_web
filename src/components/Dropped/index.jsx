@@ -5,44 +5,43 @@ import WarningMessage from "../WarningMessage";
 import GreyBox from "../../images/GreyBox.svg";
 import styles from "./grid.module.css";
 import CONSTANTS from "../../constants";
+import {getFileList, downloadFile} from '../../redux/actions'; 
+import {connect} from 'react-redux'; 
+import {MdInsertDriveFile} from 'react-icons/md'; 
 
-export default class Dropped extends Component {
+class Dropped extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      gridTextAssets: [{ description: "", header: "", id: 0 }],
+      gridTextAssets: this.props.fileNames.map((item, index) => ({title: item, id: index})),
       WarningMessageOpen: false,
-      WarningMessageText: ""
+      WarningMessageText: "",
+      token: this.props.token, 
     };
-
-    this.handleWarningClose = this.handleWarningClose.bind(this);
+    if (this.props.token != "")
+      this.props.getFiles(this.props.token); 
+    console.log(this.state.gridTextAssets);
+    this.onClickItem = this.onClickItem.bind(this);
   }
-
-  // Get the text sample data from the back end
-  componentDidMount() {
-    fetch(CONSTANTS.ENDPOINT.GRID)
-      .then(response => {
-        if (!response.ok) {
-          throw Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then(result => this.setState({ gridTextAssets: result }))
-      .catch(error =>
-        this.setState({
-          WarningMessageOpen: true,
-          WarningMessageText: `Request to get grid text failed: ${error}`
-        })
-      );
+  componentDidUpdate(prevProps){
+    if (this.props.token != prevProps.token){
+      this.setState({token: this.props.token}); 
+      if (this.props.token != ""){
+          this.props.getFiles(this.props.token);
+      }
+    }
+    if (this.props.fileNames.length > 0 && this.props.fileNames != prevProps.fileNames){
+      const assets = this.props.fileNames.map((item, index) => ({title: item, id: index}));
+      console.log(assets);
+      this.setState({
+        gridTextAssets: assets
+      });
+    }
   }
-
-  handleWarningClose() {
-    this.setState({
-      WarningMessageOpen: false,
-      WarningMessageText: ""
-    });
+  onClickItem(key){
+    console.log(key);
+    this.props.downloadFile(this.state.gridTextAssets[key].title, this.state.token); 
   }
-
   render() {
     const {
       gridTextAssets,
@@ -52,28 +51,22 @@ export default class Dropped extends Component {
     return (
       <main id="mainContent">
         <div className={classnames("text-center", styles.header)}>
-          <h1>quickdrop</h1>
-          <p>This is placeholder text. Your web app description goes here.</p>
-          <a
-            href="https://github.com/Microsoft/WebTemplateStudio"
-            className="btn btn-primary my-2"
-          >
-            Link to our Github
-          </a>
+          <h1>Quickdrop</h1>
+          <p>Upload your files here!</p>
         </div>
 
         <div className="container">
           <div className="row justify-content-center py-5">
-            <h1>Bootstrap Dropped Template</h1>
+            <h1>Files you've Dropped</h1>
           </div>
 
-          <div className="row justify-content-around text-center pb-5">
+          <div className="row justify-content-around text-center">
             {gridTextAssets.map(textAssets => (
               <GridComponent
                 key={textAssets.id}
+                id = {textAssets.id}
                 header={textAssets.title}
-                description={textAssets.shortDescription}
-                image={GreyBox}
+                callback = {this.onClickItem}
               />
             ))}
           </div>
@@ -87,3 +80,16 @@ export default class Dropped extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  token: state.auth, 
+  fileNames: state.fileNames
+})
+const mapDispatchToProps = dispatch => {
+  return {
+    getFiles: (token) => dispatch(getFileList(token)),
+    downloadFile: (name, token) => dispatch(downloadFile(name, token))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dropped); 

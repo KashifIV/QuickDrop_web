@@ -9,7 +9,10 @@ import { createStore, applyMiddleware } from "redux";
 import thunkMiddleware from 'redux-thunk';
 import {Provider} from 'react-redux';
 
-const store = createStore(rootReducer, applyMiddleware(thunkMiddleware)); 
+const token = localStorage.getItem('token'); 
+const email = token ? localStorage.getItem('email'): ''; 
+const password = token ? localStorage.getItem('password'): ""; 
+const store = createStore(rootReducer,{auth: token ? token : ""}, applyMiddleware(thunkMiddleware)); 
 ReactDOM.render(
 
     <BrowserRouter>

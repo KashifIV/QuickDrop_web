@@ -1,12 +1,11 @@
 ﻿import React from "react";
-
+import {MdInsertDriveFile} from 'react-icons/md'
 export default function GridComponent(props) {
-  const { image, header, description } = props;
+  const {id, header,callback} = props;
   return (
-    <div className="col-md-4 col-sm-12 p-5">
-      <img src={image} alt="Default Grey Box" className="mb-3" />
+    <div className="col-md-4 col-sm-12 p-5" onClick = {() => callback(id)}>
+      <MdInsertDriveFile size={32} style={{color: 'white'}}/>
       <h3>{header}</h3>
-      <p>{description}</p>
     </div>
   );
 }
