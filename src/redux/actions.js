@@ -24,6 +24,21 @@ export function downloadFile(name, token){
         socket.emit("request", {"requestType": 'downloadFile', 'tokenKey': token, 'filename': name});
     }
 }
+export function uploadFiles(files, token){
+    return dispatch => {
+        files.forEach(file => {
+            var reader = new FileReader(); 
+            reader.onload = (e) => {
+                socket.emit("request", {'requestType': 'uploadFile', 'tokenKey': token, 'filename': file.name, 'fileData': reader.result});
+            }
+            reader.readAsBinaryString(file);
+        });
+        setTimeout(function() {
+            socket.emit("request", {'requestType': 'listFiles', 'tokenKey': token}); 
+          }, 1000);
+        
+    }
+}
 export function socketDispatcher(){
     console.log('socket dispatcher initialized');
     return dispatch => socket.on("response", (data) => {

@@ -5,9 +5,10 @@ import WarningMessage from "../WarningMessage";
 import GreyBox from "../../images/GreyBox.svg";
 import styles from "./grid.module.css";
 import CONSTANTS from "../../constants";
-import {getFileList, downloadFile} from '../../redux/actions'; 
+import {getFileList, downloadFile, uploadFiles} from '../../redux/actions'; 
 import {connect} from 'react-redux'; 
-import {MdInsertDriveFile} from 'react-icons/md'; 
+import Dropzone from 'react-dropzone'; 
+
 
 class Dropped extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class Dropped extends Component {
       this.props.getFiles(this.props.token); 
     console.log(this.state.gridTextAssets);
     this.onClickItem = this.onClickItem.bind(this);
+    this.onDropFiles = this.onDropFiles.bind(this);
   }
   componentDidUpdate(prevProps){
     if (this.props.token != prevProps.token){
@@ -42,7 +44,12 @@ class Dropped extends Component {
     console.log(key);
     this.props.downloadFile(this.state.gridTextAssets[key].title, this.state.token); 
   }
+  onDropFiles = (files) => {
+    console.log(files); 
+    this.props.uploadFiles(files, this.state.token); 
+  }
   render() {
+
     const {
       gridTextAssets,
       WarningMessageOpen,
@@ -50,10 +57,20 @@ class Dropped extends Component {
     } = this.state;
     return (
       <main id="mainContent">
-        <div className={classnames("text-center", styles.header)}>
-          <h1>Quickdrop</h1>
-          <p>Upload your files here!</p>
-        </div>
+
+       
+          <Dropzone onDrop={(files) => this.onDropFiles(files)}>
+            {({getRootProps, getInputProps}) => (
+
+                  <div {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    <div className={classnames("text-center", styles.header)}>
+                      <h1>Quickdrop</h1>
+                      <p>Drag 'n' drop some files here, or click to select files</p>
+                  </div>
+                  </div>
+              )}
+          </Dropzone>
 
         <div className="container">
           <div className="row justify-content-center py-5">
@@ -88,7 +105,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => {
   return {
     getFiles: (token) => dispatch(getFileList(token)),
-    downloadFile: (name, token) => dispatch(downloadFile(name, token))
+    downloadFile: (name, token) => dispatch(downloadFile(name, token)), 
+    uploadFiles: (files,token) => dispatch(uploadFiles(files, token)),
   }
 }
 
