@@ -39,7 +39,7 @@ class Home extends Component {
     </main>);
   }
   render(){
-    return (this.state.token == "") ? this.login() : <Dropped/>; 
+    return (this.state.token === '') ? this.login() : <Dropped/>; 
   }
 }
 const mapStateToProps = state => ({

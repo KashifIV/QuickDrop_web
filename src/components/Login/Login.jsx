@@ -27,10 +27,6 @@ class Login extends React.Component{
     componentDidUpdate(prevProps){
         if (this.props.token != prevProps.token){
             this.setState({token: this.props.token}); 
-            localStorage.setItem('token', this.props.token); 
-            localStorage.setItem('email', this.state.email); 
-            localStorage.setItem('password', this.state.password); 
-            console.log('Locally Stored Items'); 
         }
     }
     handleOnSignIn(){

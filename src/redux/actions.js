@@ -14,6 +14,16 @@ export function signIn(email, password){
         socket.emit("request", {"requestType": "signIn", "account" : {"username": email, "password": password}}); 
     }
 }
+export function signOut(){
+    return dispatch => {
+        localStorage.setItem('token', ''); 
+        localStorage.setItem('email', ''); 
+        localStorage.setItem('password', ''); 
+        console.log('signed out');
+        dispatch(onSignOut()); 
+    }
+
+}
 export function getFileList(token){
     return dispatch => {
         socket.emit("request", {'requestType': 'listFiles', 'tokenKey': token}); 
@@ -97,7 +107,10 @@ function handleSignUp(json, dispatch){
 }
 function handleSignIn(json, dispatch){
     if (json['errorCode'] == 0){
-        console.log(json['responseData']['tokenKey']);
+        localStorage.setItem('token', json['responseData']['tokenKey']); 
+        localStorage.setItem('email', json['originalRequest']['account']['username']); 
+        localStorage.setItem('password', json['originalRequest']['account']['password']); 
+        console.log('Stored email and pass locally'); 
         dispatch(onSignedIn(json['responseData']['tokenKey']));  
         
     }
@@ -110,4 +123,7 @@ const onUpdateList = (items) => ({
 const onSignedIn = (token) => ({
     type: 'SIGNEDIN', 
     token
+})
+const onSignOut= () => ({
+    type: 'SIGNOUT', 
 })
