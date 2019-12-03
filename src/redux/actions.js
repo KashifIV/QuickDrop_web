@@ -39,7 +39,8 @@ export function uploadFiles(files, token){
         files.forEach(file => {
             var reader = new FileReader(); 
             reader.onload = (e) => {
-                socket.emit("request", {'requestType': 'uploadFile', 'tokenKey': token, 'filename': file.name, 'fileData': reader.result});
+                console.log(window.btoa(reader.result));
+                socket.emit("request", {'requestType': 'uploadFile', 'tokenKey': token, 'filename': file.name, 'fileData': window.btoa(reader.result)});
             }
             reader.readAsBinaryString(file);
         });
@@ -79,7 +80,7 @@ function base64ToArrayBuffer(base64) {
     return bytes;
  }
  function saveByteArray(reportName, byte) {
-    var blob = new Blob([byte], {type: "application/pdf"});
+    var blob = new Blob([byte]);
     var link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
     var fileName = reportName;
@@ -88,8 +89,8 @@ function base64ToArrayBuffer(base64) {
 };
 
 function handleDownloadFile(json, dispatch){
-    //var sampleArr = base64ToArrayBuffer(json['responseData']['fileData']);
-    saveByteArray(json['originalRequest']['filename'], json['responseData']['fileData']);
+    var sampleArr = base64ToArrayBuffer(json['responseData']['fileData']);
+    saveByteArray(json['originalRequest']['filename'], sampleArr);
 }
 function handleListFiles(json, dispatch){
     if (json['errorCode'] == 0){
